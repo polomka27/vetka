@@ -1,0 +1,27 @@
+# Секреты и локальные окружения
+.env
+backend/.env
+backend/.venv/
+backend/**/__pycache__/
+backend/**/*.pyc
+frontend/.env
+frontend/frontend.env
+
+# Frontend: зависимости, Node-runtime и сборочные артефакты
+frontend/.node/
+frontend/node_modules/
+frontend/dist/
+frontend/*.tsbuildinfo
+# Компилированные JS/d.ts, генерируемые tsc из TS-конфигов
+frontend/vite.config.js
+frontend/vite.config.d.ts
+frontend/tailwind.config.js
+frontend/tailwind.config.d.ts
+
+# Инструментальные и служебные файлы среды разработки
+.pytest_cache/
+.claude/
+.codex
+.DS_Store
+*.log
+*Zone.Identifier

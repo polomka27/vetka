@@ -1,0 +1,21 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="vetkaFaviconGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(32 32) rotate(90) scale(32)">
+      <stop offset="0" stop-color="#D8A4FF" stop-opacity="0.9"/>
+      <stop offset="0.5" stop-color="#A855F7" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#7C3AED" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="vetkaFaviconBranch" x1="10" y1="43" x2="55" y2="20" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F0C6FF"/>
+      <stop offset="55%" stop-color="#B56BFF"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="64" height="64" rx="18" fill="#140F24"/>
+  <rect width="64" height="64" rx="18" fill="url(#vetkaFaviconGlow)"/>
+
+  <g transform="translate(4 10) scale(0.095)">
+    <path d="M 557 68 L 535 61 L 520 59 L 488 61 L 475 65 L 461 73 L 451 82 L 437 101 L 416 110 L 366 124 L 289 135 L 288 133 L 307 115 L 334 77 L 334 83 L 319 109 L 327 109 L 341 104 L 356 90 L 363 77 L 368 58 L 368 41 L 364 28 L 334 42 L 318 54 L 312 61 L 305 74 L 302 87 L 302 96 L 305 109 L 297 117 L 275 132 L 247 140 L 152 154 L 151 152 L 160 135 L 178 110 L 178 117 L 168 136 L 184 132 L 190 128 L 203 113 L 210 92 L 209 68 L 207 60 L 204 59 L 180 70 L 165 81 L 158 89 L 153 98 L 150 111 L 151 124 L 155 135 L 137 153 L 120 159 L 95 162 L 62 162 L 39 159 L 28 176 L 31 178 L 51 180 L 85 179 L 123 174 L 174 163 L 195 163 L 214 167 L 249 178 L 250 175 L 243 170 L 215 158 L 218 156 L 308 143 L 336 141 L 383 151 L 398 170 L 413 178 L 421 180 L 439 180 L 453 176 L 465 170 L 478 160 L 455 141 L 437 133 L 415 132 L 400 136 L 388 142 L 423 152 L 423 155 L 402 151 L 358 137 L 405 123 L 429 112 L 457 96 L 488 87 L 494 88 L 465 98 L 447 109 L 460 116 L 475 120 L 494 120 L 509 116 L 528 105 L 542 91 Z" fill="url(#vetkaFaviconBranch)"/>
+  </g>
+</svg>

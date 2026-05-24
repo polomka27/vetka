@@ -1,0 +1,390 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Noto+Sans:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Блок задаёт CSS-переменные темы в стиле shadcn/ui для всего приложения. */
+@layer base {
+  :root {
+    --background: 258 100% 99%;
+    --foreground: 252 34% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 252 34% 14%;
+    --primary: 268 79% 58%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 267 71% 94%;
+    --secondary-foreground: 252 34% 16%;
+    --muted: 260 56% 95%;
+    --muted-foreground: 251 15% 37%;
+    --accent: 269 100% 97%;
+    --accent-foreground: 252 34% 16%;
+    --border: 264 49% 84%;
+    --input: 264 49% 84%;
+    --ring: 268 79% 58%;
+    --radius: 1.25rem;
+    --font-body: "Noto Sans", sans-serif;
+    --font-heading: "Montserrat", sans-serif;
+    --roadmap-grid-color: rgba(124, 58, 237, 0.22);
+    --roadmap-edge-active-stroke: rgba(99, 102, 241, 0.9);
+    --roadmap-edge-default-stroke: rgba(96, 165, 250, 0.85);
+    --roadmap-edge-done-stroke: rgba(52, 211, 153, 0.9);
+    --roadmap-edge-optional-stroke: rgba(147, 197, 253, 0.8);
+  }
+
+  [data-theme="dark"] {
+    --background: 247 31% 9%;
+    --foreground: 255 40% 97%;
+    --card: 246 28% 16%;
+    --card-foreground: 255 40% 97%;
+    --primary: 271 91% 68%;
+    --primary-foreground: 255 40% 97%;
+    --secondary: 248 24% 19%;
+    --secondary-foreground: 255 40% 97%;
+    --muted: 246 18% 20%;
+    --muted-foreground: 252 13% 69%;
+    --accent: 263 31% 24%;
+    --accent-foreground: 255 40% 97%;
+    --border: 251 24% 27%;
+    --input: 251 24% 27%;
+    --ring: 271 91% 68%;
+    --roadmap-grid-color: rgba(139, 92, 246, 0.18);
+    --roadmap-edge-active-stroke: rgba(167, 139, 250, 0.95);
+    --roadmap-edge-default-stroke: rgba(96, 165, 250, 0.8);
+    --roadmap-edge-done-stroke: rgba(52, 211, 153, 0.85);
+    --roadmap-edge-optional-stroke: rgba(147, 197, 253, 0.65);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 6rem;
+    overflow-x: hidden;
+  }
+
+  html[data-theme="dark"] {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply min-h-screen bg-background text-foreground antialiased;
+    background-image:
+      radial-gradient(circle at top left, rgba(167, 139, 250, 0.3), transparent 28%),
+      radial-gradient(circle at top right, rgba(192, 132, 252, 0.22), transparent 26%),
+      radial-gradient(circle at bottom center, rgba(124, 58, 237, 0.12), transparent 32%);
+    font-family: var(--font-body);
+    font-feature-settings: "rlig" 1, "calt" 1;
+    overflow-x: hidden;
+    transition:
+      background-color 220ms ease,
+      color 220ms ease,
+      background-image 220ms ease;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  #root {
+    min-height: 100vh;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  [data-theme="light"] body {
+    background-image:
+      radial-gradient(circle at top left, rgba(196, 181, 253, 0.75), transparent 30%),
+      radial-gradient(circle at top right, rgba(221, 214, 254, 0.85), transparent 24%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(245, 243, 255, 0.95));
+  }
+
+  [data-theme="dark"] body {
+    background-image:
+      radial-gradient(circle at top left, rgba(109, 40, 217, 0.42), transparent 28%),
+      radial-gradient(circle at top right, rgba(168, 85, 247, 0.18), transparent 22%),
+      linear-gradient(180deg, rgba(15, 10, 31, 0.98), rgba(12, 10, 24, 1));
+  }
+
+  a {
+    @apply text-inherit no-underline;
+  }
+
+  img,
+  picture,
+  video,
+  canvas {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    max-width: 100%;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .font-heading {
+    font-family: var(--font-heading);
+  }
+}
+
+/* Блок добавляет мягкое появление страниц и основных секций. */
+@keyframes pageShellEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-shell-entrance {
+  animation: pageShellEntrance 220ms ease-out;
+}
+
+.react-flow__node {
+  max-width: 100%;
+}
+
+.react-flow__node.selected {
+  z-index: 3 !important;
+}
+
+.glass-surface {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.08)),
+    rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 24px 60px rgba(76, 29, 149, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(26px);
+}
+
+[data-theme="light"] .glass-surface {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(245, 243, 255, 0.68)),
+    rgba(255, 255, 255, 0.6);
+  border-color: rgba(139, 92, 246, 0.14);
+  box-shadow:
+    0 24px 60px rgba(139, 92, 246, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+[data-theme="dark"] .glass-surface {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04)),
+    rgba(26, 18, 49, 0.52);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 24px 70px rgba(12, 10, 24, 0.48),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* Блок делает мобильное верхнее меню менее прозрачным, чтобы список лучше читался на фоне контента. */
+.mobile-top-menu-panel {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(245, 243, 255, 0.93)),
+    rgba(255, 255, 255, 0.94);
+  border-color: rgba(139, 92, 246, 0.18);
+  box-shadow:
+    0 18px 44px rgba(76, 29, 149, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+[data-theme="dark"] .mobile-top-menu-panel {
+  background:
+    linear-gradient(180deg, rgba(30, 20, 58, 0.98), rgba(20, 14, 39, 0.96)),
+    rgba(18, 14, 36, 0.95);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 20px 54px rgba(8, 6, 20, 0.52),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.roadmap-flow-canvas {
+  background: linear-gradient(160deg, rgba(245, 243, 255, 0.96) 0%, rgba(237, 233, 254, 0.92) 100%);
+}
+
+[data-theme="dark"] .roadmap-flow-canvas {
+  background: linear-gradient(160deg, rgba(15, 10, 30, 0.96) 0%, rgba(22, 14, 46, 0.98) 100%);
+}
+
+[data-theme="light"] .roadmap-flow-node-current {
+  box-shadow:
+    0 0 0 2px rgba(124, 58, 237, 0.3),
+    0 12px 28px rgba(124, 58, 237, 0.18) !important;
+}
+
+/* Блок задаёт анимацию активного узла и пути в карте роадмапа. */
+@keyframes roadmapPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.24);
+    transform: scale(1);
+  }
+
+  50% {
+    box-shadow: 0 0 0 14px rgba(13, 148, 136, 0);
+    transform: scale(1.015);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(13, 148, 136, 0);
+    transform: scale(1);
+  }
+}
+
+/* Блок задаёт анимацию движения по активным рёбрам карты. */
+@keyframes roadmapDash {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+
+/* Блок оформляет выбранную ноду как текущий этап прохождения. */
+.roadmap-flow-node-current {
+  animation: roadmapPulse 2.6s ease-in-out infinite;
+}
+
+/* Блок анимирует активный путь пользователя по карте. */
+.roadmap-edge-active .react-flow__edge-path {
+  animation: roadmapDash 1.35s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.45));
+}
+
+/* Блок делает правую контекстную панель более живой при выборе ноды. */
+.roadmap-side-panel {
+  animation: roadmapPanelIn 220ms ease-out;
+}
+
+.roadmap-side-panel,
+.roadmap-side-panel * {
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.react-flow__edge-path {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 6px rgba(139, 92, 246, 0.18));
+}
+
+[data-theme="light"] .react-flow__edge-path {
+  filter: drop-shadow(0 0 4px rgba(124, 58, 237, 0.16));
+}
+
+.react-flow__handle {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Блок возвращает кликабельность видимым точкам связи в мастерской. */
+.react-flow__handle[data-connectable="true"],
+.react-flow__handle.connectable {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+[data-theme="light"] .react-flow__controls {
+  border-color: rgba(139, 92, 246, 0.16) !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 20px 40px rgba(139, 92, 246, 0.12) !important;
+}
+
+[data-theme="dark"] .react-flow__controls {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  background: rgba(30, 20, 58, 0.84) !important;
+  box-shadow: 0 20px 40px rgba(3, 2, 20, 0.35) !important;
+}
+
+@keyframes roadmapPanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  /* Блок предотвращает iOS-zoom в формах за счёт безопасного размера шрифта для полей. */
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+
+  /* Блок делает ноды роадмапа компактнее, чтобы карта читалась на узких экранах. */
+  .roadmap-flow-node {
+    min-width: 184px;
+    max-width: 184px;
+    padding: 0.75rem 0.875rem;
+  }
+
+  /* Блок делает мобильную версию визуально самостоятельной: плотнее карточки и мягче тени. */
+  .glass-surface {
+    box-shadow:
+      0 14px 34px rgba(76, 29, 149, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(20px);
+  }
+
+  .page-shell-entrance,
+  .page-shell-entrance > * {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Блок жёстко ограничивает мобильные оболочки шириной viewport, чтобы fixed и absolute-элементы не создавали горизонтальный скролл. */
+  main,
+  .glass-surface,
+  .mobile-top-menu,
+  .mobile-bottom-nav,
+  .roadmap-side-panel {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+}
+
+@media (max-width: 1024px) {
+  /* Блок снижает риск горизонтального скролла на tablet-ширинах, где fixed-элементы и тени чаще вылезают за viewport. */
+  html,
+  body,
+  #root {
+    overflow-x: hidden;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Блок уменьшает техническую высоту карты на телефонах и небольших планшетах, чтобы первый экран не занимал весь viewport. */
+  .roadmap-flow-canvas {
+    min-height: 360px;
+  }
+}
