@@ -31,12 +31,7 @@ fi
 
 # Создаём временный самоподписанный сертификат, чтобы nginx стартовал
 echo "--- Создание временного самоподписанного сертификата..."
-CERT_PATH="$DATA_PATH/conf/live/xn--e1afmkfd.online"
-mkdir -p "$CERT_PATH"
-docker compose run --rm --entrypoint "openssl req -x509 -nodes -newkey rsa:4096 -days 1 \
-  -keyout '/etc/letsencrypt/live/xn--e1afmkfd.online/privkey.pem' \
-  -out '/etc/letsencrypt/live/xn--e1afmkfd.online/fullchain.pem' \
-  -subj '/CN=localhost'" certbot
+docker compose run --rm --entrypoint "sh -c 'mkdir -p /etc/letsencrypt/live/xn--e1afmkfd.online && openssl req -x509 -nodes -newkey rsa:4096 -days 1 -keyout /etc/letsencrypt/live/xn--e1afmkfd.online/privkey.pem -out /etc/letsencrypt/live/xn--e1afmkfd.online/fullchain.pem -subj /CN=localhost'" certbot
 
 # Запускаем nginx с временным сертификатом
 echo "--- Запуск nginx..."
