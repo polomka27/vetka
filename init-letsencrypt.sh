@@ -33,9 +33,9 @@ fi
 echo "--- Создание временного самоподписанного сертификата..."
 docker compose run --rm --entrypoint "sh -c 'mkdir -p /etc/letsencrypt/live/xn--80adju3b.online && openssl req -x509 -nodes -newkey rsa:4096 -days 1 -keyout /etc/letsencrypt/live/xn--80adju3b.online/privkey.pem -out /etc/letsencrypt/live/xn--80adju3b.online/fullchain.pem -subj /CN=localhost'" certbot
 
-# Запускаем nginx с временным сертификатом
-echo "--- Запуск nginx..."
-docker compose up --force-recreate -d frontend
+# Собираем образ и запускаем nginx с временным сертификатом
+echo "--- Сборка и запуск nginx..."
+docker compose up --build --force-recreate -d frontend
 
 # Удаляем временный сертификат
 echo "--- Удаление временного сертификата..."
