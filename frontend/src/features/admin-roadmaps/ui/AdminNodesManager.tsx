@@ -1,6 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Wand2 } from "lucide-react";
 
 import {
+  useAutoLayoutMutation,
   useCreateAdminNodeMutation,
   useCreateAdminResourceMutation,
   useDeleteAdminNodeMutation,
@@ -14,9 +16,11 @@ import type {
   AdminRoadmapNodeFormValues
 } from "@/entities/admin-roadmap/model/types";
 import type { RoadmapNode } from "@/entities/roadmap/model/types";
-import { buildRoadmapFlow, findRoadmapNodeById } from "@/entities/roadmap/lib/roadmap-flow";
+import type { Connection } from "@xyflow/react";
+import { buildRoadmapFlow, computeAutoLayout, findRoadmapNodeById } from "@/entities/roadmap/lib/roadmap-flow";
 import { RoadmapFlow } from "@/entities/roadmap/ui/RoadmapFlow";
 import { WorkshopNodePanel } from "@/features/admin-roadmaps/ui/WorkshopNodePanel";
+import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { StateMessage } from "@/shared/ui/state-message";
 
@@ -46,7 +50,12 @@ function getWorkshopLoadingLabel(params: {
   isCreatingResource: boolean;
   isDeletingResource: boolean;
   isRelinking: boolean;
+  isAutoLayout: boolean;
 }) {
+  if (params.isAutoLayout) {
+    return "Выравниваем схему...";
+  }
+
   if (params.isCreating) {
     return "Добавляем шаг...";
   }
@@ -81,6 +90,7 @@ export function AdminNodesManager({ roadmapId, nodes }: AdminNodesManagerProps) 
   const createNodeMutation = useCreateAdminNodeMutation(roadmapId);
   const deleteNodeMutation = useDeleteAdminNodeMutation(roadmapId);
   const relinkNodeMutation = useRelinkAdminNodeMutation(roadmapId);
+  const autoLayoutMutation = useAutoLayoutMutation(roadmapId);
   const sortedNodes = useMemo(() => [...nodes].sort((left, right) => {
     if (left.depth !== right.depth) {
       return left.depth - right.depth;
@@ -189,6 +199,30 @@ export function AdminNodesManager({ roadmapId, nodes }: AdminNodesManagerProps) 
     deleteResourceMutation.mutate(resourceId);
   };
 
+  // Блок сбрасывает ручные позиции и укладывает все шаги по dagre-алгоритму.
+  const handleAutoLayout = () => {
+    const positions = computeAutoLayout(treeNodes);
+    const updates = sortedNodes
+      .map((node) => {
+        const pos = positions.get(node.id);
+        return pos ? { nodeId: node.id, canvas_x: pos.x, canvas_y: pos.y } : null;
+      })
+      .filter((u): u is { nodeId: number; canvas_x: number; canvas_y: number } => u !== null);
+    autoLayoutMutation.mutate(updates);
+  };
+
+  // Блок связывает два шага при drag-to-connect на холсте редактора.
+  const handleConnect = useCallback((params: Connection) => {
+    if (!params.source || !params.target) {
+      return;
+    }
+
+    relinkNodeMutation.mutate({
+      nodeId: Number(params.target),
+      payload: { parent_id: Number(params.source) }
+    });
+  }, [relinkNodeMutation]);
+
   // Блок сохраняет новое положение шага после ручного перетаскивания по карте.
   const handleStepDragStop = ({ nodeId, x, y }: { nodeId: number; x: number; y: number }) => {
     relinkNodeMutation.mutate({
@@ -206,7 +240,8 @@ export function AdminNodesManager({ roadmapId, nodes }: AdminNodesManagerProps) 
     deleteNodeMutation.isPending ||
     createResourceMutation.isPending ||
     deleteResourceMutation.isPending ||
-    relinkNodeMutation.isPending
+    relinkNodeMutation.isPending ||
+    autoLayoutMutation.isPending
   );
   const workshopLoadingLabel = getWorkshopLoadingLabel({
     isCreating: createNodeMutation.isPending,
@@ -214,15 +249,28 @@ export function AdminNodesManager({ roadmapId, nodes }: AdminNodesManagerProps) 
     isDeleting: deleteNodeMutation.isPending,
     isCreatingResource: createResourceMutation.isPending,
     isDeletingResource: deleteResourceMutation.isPending,
-    isRelinking: relinkNodeMutation.isPending
+    isRelinking: relinkNodeMutation.isPending,
+    isAutoLayout: autoLayoutMutation.isPending
   });
 
   return (
     <Card>
       <CardHeader>
-        <div className="space-y-2">
-          <CardTitle>Карта</CardTitle>
-          <CardDescription>Выбери шаг и редактируй его справа.</CardDescription>
+        <div className="flex items-start justify-between gap-3">
+          <div className="space-y-2">
+            <CardTitle>Карта</CardTitle>
+            <CardDescription>Выбери шаг и редактируй его справа.</CardDescription>
+          </div>
+          <Button
+            disabled={isWorkshopMutating || sortedNodes.length === 0}
+            onClick={handleAutoLayout}
+            size="sm"
+            type="button"
+            variant="outline"
+          >
+            <Wand2 className="mr-2 h-4 w-4" />
+            Выровнять
+          </Button>
         </div>
       </CardHeader>
       <CardContent className="grid gap-6 pt-0">
@@ -246,6 +294,8 @@ export function AdminNodesManager({ roadmapId, nodes }: AdminNodesManagerProps) 
                   title="Карта"
                   description=""
                   allowDragging
+                  allowConnecting
+                  onConnect={handleConnect}
                   onStepDragStop={handleStepDragStop}
                   selectedNodeId={selectedTreeNode?.id ?? selectedNodeId}
                   onClearSelection={resetPanel}

@@ -115,6 +115,24 @@ export function useRelinkAdminNodeMutation(roadmapId: number) {
   });
 }
 
+// Блок сохраняет dagre-позиции для всех узлов карты параллельными PATCH-запросами.
+export function useAutoLayoutMutation(roadmapId: number) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (updates: Array<{ nodeId: number; canvas_x: number; canvas_y: number }>) =>
+      Promise.all(
+        updates.map(({ nodeId, canvas_x, canvas_y }) =>
+          adminRoadmapsApi.updateNode(nodeId, { canvas_x, canvas_y })
+        )
+      ),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.admin.roadmap(roadmapId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.roadmaps.all });
+    }
+  });
+}
+
 // Блок удаляет узел и обновляет детальную страницу роадмапа.
 export function useDeleteAdminNodeMutation(roadmapId: number) {
   const queryClient = useQueryClient();

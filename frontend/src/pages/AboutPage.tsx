@@ -62,7 +62,7 @@ export function AboutPage() {
       <Reveal>
         <section className="max-w-2xl">
           <p className="text-base leading-8 text-muted-foreground sm:text-lg">
-            Мы сами проходили через это: десятки вкладок, курсы по цене подержанной машины
+            Мы сами проходили через это: десятки вкладок, курсы за немалые деньги
             и полное непонимание, в каком порядке всё учить. «Ветка» родилась из простой
             мысли — обучению не хватает не контента, а карты местности.
           </p>
@@ -74,9 +74,9 @@ export function AboutPage() {
         <section className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6 sm:p-8 lg:p-10">
           <h2 className="font-heading text-xl font-semibold sm:text-2xl">Что такое «Ветка»</h2>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-muted-foreground sm:text-base">
-            Библиотека интерактивных дорожных карт. Каждая карта — пошаговый маршрут навыка
-            или профессии. Отмечаешь шаги, ведёшь заметки, видишь прогресс. Скоро — сможешь
-            собирать и публиковать свои карты.
+            Это библиотека дорожных карт по навыкам и профессиям. Каждая карта — пошаговый
+            маршрут: что учить, в каком порядке и где брать материалы. Можно отмечать
+            пройденное, оставлять заметки, видеть прогресс. Карты можно собирать и самим.
           </p>
         </section>
       </Reveal>
@@ -121,37 +121,26 @@ export function AboutPage() {
         <section className="max-w-2xl space-y-3">
           <h2 className="font-heading text-xl font-semibold sm:text-2xl">Куда движемся</h2>
           <p className="text-sm leading-7 text-muted-foreground sm:text-base">
-            Сейчас «Ветка» — библиотека готовых карт. Следующий шаг: маркетплейс, где
-            маршруты создают сами пользователи, а лучшие поднимаются в топ. Строим это
-            постепенно — без обещаний дат.
+            <strong className="font-semibold text-foreground">Сейчас.</strong> Библиотека готовых карт, которые собираем мы сами.<br />
+            <strong className="font-semibold text-foreground">Дальше.</strong> Хотим, чтобы карты могли создавать сами пользователи, а самые удачные становились заметнее.<br />
+            <strong className="font-semibold text-foreground">Как.</strong> Спокойно, постепенно. Без жёстких дат и громких анонсов.
           </p>
         </section>
       </Reveal>
 
-      {/* ───────────────────────────────────────────────── 6. КОМАНДА ── */}
+      {/* ───────────────────────────────────────────── 6. ОБРАТНАЯ СВЯЗЬ ── */}
       <Reveal>
-        <section className="grid gap-5">
-          <h2 className="font-heading text-xl font-semibold sm:text-2xl">Команда</h2>
-          <div className="flex flex-wrap gap-3">
-            {[
-              { initial: "О", name: "Орхан", role: "Продукт, стратегия, исследования" },
-              { initial: "Г", name: "Глеб",  role: "Разработка"                        },
-            ].map((m) => (
-              <div
-                key={m.name}
-                className="flex items-center gap-3 rounded-[1.25rem] border border-white/10 bg-white/[0.03] px-4 py-3"
-              >
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/15 font-heading text-sm font-semibold text-primary">
-                  {m.initial}
-                </div>
-                <div>
-                  <div className="text-sm font-semibold">{m.name}</div>
-                  <div className="text-xs text-muted-foreground">{m.role}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <p className="text-xs text-muted-foreground">Небольшая команда, делаем честно.</p>
+        <section className="max-w-2xl space-y-2">
+          <h2 className="font-heading text-xl font-semibold sm:text-2xl">Есть предложения или замечания?</h2>
+          <p className="text-sm leading-7 text-muted-foreground sm:text-base">
+            Напиши нам:{" "}
+            <a
+              href="mailto:prodbysilentstill@gmail.com"
+              className="text-foreground underline underline-offset-4 transition-opacity hover:opacity-70"
+            >
+              prodbysilentstill@gmail.com
+            </a>
+          </p>
         </section>
       </Reveal>
 
@@ -159,21 +148,21 @@ export function AboutPage() {
       <Reveal>
         <section className="flex flex-wrap gap-3">
           {!isAuthenticated ? (
-            <Button asChild size="lg">
+            <Button asChild size="lg" className="w-full sm:w-auto">
               <Link to="/register">
                 Зарегистрироваться
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           ) : (
-            <Button asChild size="lg">
+            <Button asChild size="lg" className="w-full sm:w-auto">
               <Link to="/roadmaps">
                 Открыть библиотеку
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           )}
-          <Button asChild size="lg" variant="outline">
+          <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
             <a href="mailto:prodbysilentstill@gmail.com">Написать нам</a>
           </Button>
         </section>

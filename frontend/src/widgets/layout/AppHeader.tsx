@@ -4,6 +4,7 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import logoImage from "@/vetka_logo_trace.svg";
 import { useCurrentUserQuery, useLogoutMutation } from "@/entities/auth/api/hooks";
+import { clearSavedRoadmaps } from "@/features/collection/model/saved-roadmaps";
 import { useOutsidePointerDown } from "@/shared/lib/use-outside-pointerdown";
 import { useTheme } from "@/shared/theme/ThemeProvider";
 import { Button } from "@/shared/ui/button";
@@ -13,7 +14,7 @@ import { cn } from "@/shared/lib/utils";
 // Блок хранит основной набор ссылок для полной навигации сайта на desktop.
 const primaryNavigation = [
   { to: "/roadmaps", label: "Библиотека" },
-  { to: "/collection", label: "Коллекция" },
+  { to: "/collection", label: "Избранное" },
   { to: "/map", label: "Карта" },
   { to: "/workshop/roadmaps", label: "Мастерская" }
 ];
@@ -22,17 +23,15 @@ const primaryNavigation = [
 const mobileBottomNavigation = [
   { to: "/roadmaps", label: "Библиотека" },
   { to: "/map", label: "Карта" },
-  { to: "/collection", label: "Коллекция" }
+  { to: "/collection", label: "Избранное" }
 ];
 
-// Блок возвращает ссылки, которые должны жить именно в верхнем выпадающем меню на телефоне.
-function getMobileMenuNavigation(isAuthenticated: boolean) {
-  return isAuthenticated
-    ? [
-        { to: "/workshop/roadmaps", label: "Мастерская" },
-        { to: "/profile", label: "Профиль" }
-      ]
-    : [{ to: "/workshop/roadmaps", label: "Мастерская" }];
+// Блок возвращает ссылки верхнего выпадающего меню на телефоне.
+function getMobileMenuNavigation() {
+  return [
+    { to: "/workshop/roadmaps", label: "Мастерская" },
+    { to: "/about", label: "О проекте" },
+  ];
 }
 
 // Блок собирает классы ссылок меню для desktop и mobile-версии header.
@@ -92,7 +91,7 @@ export function AppHeader() {
   const isAuthenticated = Boolean(accessToken && user);
   // Блок разделяет desktop-навигацию, phone-нижнюю панель и phone-выпадающее меню, чтобы мобильная версия не перегружалась.
   const navigationItems = primaryNavigation;
-  const mobileMenuItems = getMobileMenuNavigation(isAuthenticated);
+  const mobileMenuItems = getMobileMenuNavigation();
   const mobileBottomItems = mobileBottomNavigation;
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
@@ -121,6 +120,7 @@ export function AppHeader() {
   const handleLogout = () =>
     logoutMutation.mutate(undefined, {
       onSuccess: () => {
+        clearSavedRoadmaps();
         closeMobileMenu();
         navigate("/", { replace: true });
       }
@@ -143,9 +143,9 @@ export function AppHeader() {
                 src={logoImage}
               />
             </Link>
-            <div className="min-w-0">
-              <div className="hidden text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground sm:block">личная траектория развития</div>
-              <Link to="/" className="block truncate font-heading text-lg font-semibold tracking-tight transition-opacity hover:opacity-80 sm:text-3xl">
+            <div className="min-w-0 flex h-9 flex-col justify-center gap-0.5 sm:h-12">
+              <div className="hidden text-xs font-medium leading-none uppercase tracking-[0.18em] text-muted-foreground sm:block">расти в нужном направлении</div>
+              <Link to="/" className="block truncate font-heading text-lg font-semibold leading-none tracking-tight transition-opacity hover:opacity-80 sm:text-3xl">
                 ветка
               </Link>
             </div>
@@ -265,58 +265,31 @@ export function AppHeader() {
                   </nav>
 
                   {isAuthenticated ? (
-                    <div className="grid gap-3 rounded-[1.5rem] border border-white/10 bg-white/5 p-3">
-                      <div className="min-w-0">
-                        <Link to="/profile" className="block truncate text-sm font-semibold">
-                          {displayName}
-                        </Link>
-                        <div className="mt-1 truncate text-xs text-muted-foreground">{user?.email}</div>
-                      </div>
-                      <NavLink
-                        to="/about"
-                        className={({ isActive }) =>
-                          cn(
-                            "rounded-2xl px-4 py-2.5 text-sm transition-colors",
-                            isActive ? "bg-primary/12 text-foreground font-medium" : "text-muted-foreground hover:bg-white/8 hover:text-foreground"
-                          )
-                        }
-                        onClick={closeMobileMenu}
-                      >
-                        О проекте
-                      </NavLink>
+                    <div className="flex items-center justify-between gap-3 rounded-[1.5rem] border border-white/10 bg-white/5 px-4 py-3">
+                      <Link to="/profile" onClick={closeMobileMenu} className="min-w-0">
+                        <div className="truncate text-sm font-semibold">{displayName}</div>
+                        <div className="truncate text-xs text-muted-foreground">{user?.email}</div>
+                      </Link>
                       <Button
-                        className="w-full border-red-500/20 bg-red-500/10 text-red-300 hover:bg-red-500/18 hover:text-red-200"
+                        aria-label="Выйти из аккаунта"
+                        className="shrink-0 border-red-500/20 bg-red-500/10 text-red-300 hover:bg-red-500/18 hover:text-red-200"
                         disabled={logoutMutation.isPending}
                         onClick={handleLogout}
+                        size="sm"
                         type="button"
                         variant="outline"
                       >
-                        <LogOut className="mr-2 h-4 w-4" />
-                        Выйти
+                        <LogOut className="h-4 w-4" />
                       </Button>
                     </div>
                   ) : (
-                    <div className="grid gap-2">
-                      <NavLink
-                        to="/about"
-                        className={({ isActive }) =>
-                          cn(
-                            "rounded-2xl px-4 py-2.5 text-sm transition-colors",
-                            isActive ? "bg-primary/12 text-foreground font-medium" : "text-muted-foreground hover:bg-white/8 hover:text-foreground"
-                          )
-                        }
-                        onClick={closeMobileMenu}
-                      >
-                        О проекте
-                      </NavLink>
-                      <div className="grid gap-2 sm:grid-cols-2">
-                        <Button asChild className="w-full" variant="ghost">
-                          <Link to="/login">Вход</Link>
-                        </Button>
-                        <Button asChild className="w-full">
-                          <Link to="/register">Регистрация</Link>
-                        </Button>
-                      </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button asChild className="w-full" variant="ghost">
+                        <Link to="/login">Вход</Link>
+                      </Button>
+                      <Button asChild className="w-full">
+                        <Link to="/register">Регистрация</Link>
+                      </Button>
                     </div>
                   )}
                 </div>

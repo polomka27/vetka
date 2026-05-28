@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Check, ChevronRight, CircleDashed, Clock3 } from "lucide-react";
 
 import { useCurrentUserQuery } from "@/entities/auth/api/hooks";
+import { AppFooter } from "@/widgets/layout/MainLayout";
 import { Button } from "@/shared/ui/button";
 import { cn } from "@/shared/lib/utils";
 import logoImage from "@/vetka_logo_trace.svg";
@@ -161,29 +162,28 @@ export function HomePage() {
           </div>
 
           <h1 className="font-heading text-4xl font-bold leading-[1.04] tracking-tight sm:text-5xl lg:text-[3.5rem]">
-            Учись по маршруту,
+            Учись по правильному
             <br />
             <span className="bg-[linear-gradient(135deg,#a855f7_0%,#7c3aed_52%,#c4b5fd_100%)] bg-clip-text text-transparent">
-              а не наугад.
+              маршруту.
             </span>
           </h1>
 
           <p className="max-w-xl text-base leading-7 text-muted-foreground sm:text-lg">
-            «Ветка» — библиотека дорожных карт. Видишь, что учить, в каком порядке
-            и где. И главное — видишь свой прогресс.
+            «Ветка» — интерактивная библиотека дорожных карт знаний и навыков.
           </p>
 
           <div className="flex flex-wrap gap-3 pt-1">
             <Button asChild size="lg" className="w-full sm:w-auto">
               <Link to={isAuthenticated ? "/roadmaps" : "/register"}>
-                {isAuthenticated ? "Открыть библиотеку" : "Зарегистрироваться"}
+                {isAuthenticated ? "Открыть библиотеку" : "Попробовать"}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
-              <Link to="/roadmaps">Посмотреть карты</Link>
-            </Button>
           </div>
+          {!isAuthenticated && (
+            <p className="text-sm text-muted-foreground">Карты открыты всем, аккаунт нужен только чтобы сохранять прогресс.</p>
+          )}
         </div>
 
         {/* Right: interactive mini-map */}
@@ -205,11 +205,11 @@ export function HomePage() {
               className="pointer-events-none absolute -right-8 top-0 h-48 w-48 translate-x-1/4 -translate-y-1/4 rounded-full bg-violet-500/10 blur-3xl"
             />
             <blockquote className="relative max-w-2xl">
-              <p className="font-heading text-xl font-semibold leading-relaxed sm:text-2xl lg:text-3xl">
+              <p className="font-heading text-2xl font-semibold leading-relaxed sm:text-3xl">
                 Туториалов миллион, а порядка — ноль.{" "}
                 <span className="font-normal text-muted-foreground">
-                  Не ясно, с чего начать, что важно, а что подождёт.
-                  Учишь-учишь, а прогресса не видно — и руки опускаются.
+                  Не очень понятно, с чего начинать и что важно. Учишь-учишь, а прогресса
+                  будто и нет. Знакомое чувство.
                 </span>
               </p>
             </blockquote>
@@ -229,9 +229,9 @@ export function HomePage() {
             {/* Шаг 1 — широкий, со списком тем */}
             <div className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-6 sm:p-7">
               <span className="font-heading text-5xl font-bold text-primary/20 sm:text-6xl">01</span>
-              <h3 className="mt-3 font-heading text-lg font-semibold sm:text-xl">Выбери карту.</h3>
+              <h3 className="mt-3 font-heading text-lg font-semibold sm:text-xl">Выбираешь карту.</h3>
               <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                Готовый маршрут под цель — от Python-джуна до смены профессии.
+                Готовые маршруты под разные цели — Python с нуля, фронтенд, Data Science и другие.
               </p>
               <div className="mt-5 space-y-2">
                 {["Frontend-разработчик", "Data Science", "DevOps", "UX-дизайн"].map((t) => (
@@ -249,9 +249,9 @@ export function HomePage() {
             {/* Шаг 2 — узлы с иконками статусов */}
             <div className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-6 sm:p-7">
               <span className="font-heading text-5xl font-bold text-primary/20 sm:text-6xl">02</span>
-              <h3 className="mt-3 font-heading text-lg font-semibold sm:text-xl">Иди по шагам.</h3>
+              <h3 className="mt-3 font-heading text-lg font-semibold sm:text-xl">Идёшь по шагам.</h3>
               <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                Каждый шаг — что освоить и где. Отмечаешь пройденное, оставляешь заметки.
+                На каждом шаге написано, что освоить и где. Можно оставлять заметки для себя.
               </p>
               <div className="mt-5 space-y-2">
                 {[
@@ -289,9 +289,9 @@ export function HomePage() {
             {/* Шаг 3 — прогресс-бары */}
             <div className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-6 sm:p-7">
               <span className="font-heading text-5xl font-bold text-primary/20 sm:text-6xl">03</span>
-              <h3 className="mt-3 font-heading text-lg font-semibold sm:text-xl">Видишь рост.</h3>
+              <h3 className="mt-3 font-heading text-lg font-semibold sm:text-xl">Видишь, как растёшь.</h3>
               <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                Прогресс заполняется на глазах. Вернулся вечером — продолжил с того места.
+                Прогресс сохраняется. Закрыл вкладку, вернулся через неделю — продолжил с того же места.
               </p>
               <div className="mt-5 space-y-3.5">
                 {[
@@ -318,62 +318,25 @@ export function HomePage() {
         </section>
       </Reveal>
 
-      {/* ───────────────────────────────── 4. ПОЧЕМУ «ВЕТКА», А НЕ ... ── */}
+      {/* ──────────────────────────────────────────── 4. О ПРОЕКТЕ ── */}
       <Reveal>
-        <section className="grid gap-6">
-          <h2 className="font-heading text-2xl font-semibold sm:text-3xl">
-            Почему «Ветка», а не ещё&#8209;один&#8209;курс
-          </h2>
-
-          <div className="grid gap-3">
-            {[
-              {
-                them: "Курсы дают контент за 150–200 тыс. ₽.",
-                us:   "«Ветка» даёт структуру — почти бесплатно.",
-              },
-              {
-                them: "Зарубежные аналоги — только про IT и без русского.",
-                us:   "«Ветка» — шире и на русском.",
-              },
-              {
-                them: "Очередная свалка ссылок без порядка.",
-                us:   "Маршрут с порядком и прогрессом.",
-              },
-            ].map((row, i) => (
-              <div
-                key={i}
-                className="grid items-center gap-2 rounded-[1.4rem] border border-white/8 bg-white/[0.025] p-4 sm:grid-cols-[minmax(0,1fr)_2rem_minmax(0,1fr)] sm:gap-3 sm:p-5"
-              >
-                <p className="text-sm leading-6 text-muted-foreground">{row.them}</p>
-                <ArrowRight
-                  className="hidden h-4 w-4 shrink-0 text-primary/40 sm:block"
-                  aria-hidden
-                />
-                <p className="text-sm font-semibold leading-6">{row.us}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-      </Reveal>
-
-      {/* ───────────────────────────── 5. ЖИВОЕ ДОКАЗАТЕЛЬСТВО ЦЕННОСТИ ── */}
-      <Reveal>
-        <section className="grid gap-6">
-          <div className="space-y-1.5">
-            <h2 className="font-heading text-2xl font-semibold sm:text-3xl">
-              Попробуй прямо здесь
-            </h2>
-            <p className="text-sm text-muted-foreground sm:text-base">
-              Это фрагмент реальной карты. Отметь шаги — посмотри, как растёт прогресс.
+        <section className="grid gap-5 rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6 sm:p-8 lg:p-10">
+          <div className="max-w-xl space-y-3">
+            <h2 className="font-heading text-2xl font-semibold sm:text-3xl">О проекте</h2>
+            <p className="text-sm leading-7 text-muted-foreground sm:text-base">
+              Кто и зачем делает «Ветку», во что мы верим и куда движемся.
             </p>
-          </div>
-          <div className="mx-auto w-full max-w-sm">
-            <MiniRoadmapDemo />
+            <Button asChild variant="outline" size="lg">
+              <Link to="/about">
+                Читать
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
           </div>
         </section>
       </Reveal>
 
-      {/* ──────────────────────────────────────────── 6. ФИНАЛЬНЫЙ CTA ── */}
+      {/* ──────────────────────────────────────────── 5. ФИНАЛЬНЫЙ CTA ── */}
       <Reveal>
         <section className="relative overflow-hidden rounded-[2rem] border border-white/12 bg-[linear-gradient(135deg,rgba(109,40,217,0.22),rgba(76,29,149,0.14))] p-8 sm:p-10 lg:p-12">
           <div
@@ -382,40 +345,30 @@ export function HomePage() {
           />
           <div className="relative max-w-xl space-y-3">
             <h2 className="font-heading text-2xl font-semibold leading-tight sm:text-3xl lg:text-4xl">
-              {isAuthenticated ? "Продолжи свой маршрут." : "Хватит учиться наугад."}
+              {isAuthenticated ? "Продолжи свой маршрут." : "Если интересно — заходи."}
             </h2>
             <p className="text-sm leading-7 text-muted-foreground sm:text-base">
               {isAuthenticated
                 ? "Открой библиотеку карт и выбери следующий шаг."
-                : "Заведи аккаунт и начни первый маршрут сегодня — бесплатно."}
+                : "Выбери карту, отметь первый шаг. Дальше будет понятнее."}
             </p>
             <div className="pt-2">
               <Button asChild size="lg">
                 <Link to={isAuthenticated ? "/roadmaps" : "/register"}>
-                  {isAuthenticated ? "Открыть библиотеку" : "Зарегистрироваться"}
+                  {isAuthenticated ? "Открыть библиотеку" : "Попробовать"}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
+              {!isAuthenticated && (
+                <p className="mt-2 text-xs text-muted-foreground">Через почту или Яндекс. Никаких карт и пробных периодов.</p>
+              )}
             </div>
           </div>
         </section>
       </Reveal>
 
       {/* ─────────────────────────────────────────────────── 7. ФУТЕР ── */}
-      <footer className="flex flex-col gap-4 border-t border-white/8 pt-6 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3">
-          <img src={logoImage} alt="Ветка" className="h-6 w-auto opacity-70" />
-          <span className="text-xs text-muted-foreground">расти в нужном направлении</span>
-        </div>
-        <nav aria-label="Навигация по сайту" className="flex flex-wrap gap-x-5 gap-y-2 text-xs text-muted-foreground">
-          <Link to="/roadmaps" className="transition-colors hover:text-foreground">Карты</Link>
-          <Link to="/about"    className="transition-colors hover:text-foreground">О проекте</Link>
-          {isAuthenticated
-            ? <Link to="/profile" className="transition-colors hover:text-foreground">Профиль</Link>
-            : <Link to="/login"   className="transition-colors hover:text-foreground">Войти</Link>
-          }
-        </nav>
-      </footer>
+      <HomeFooter isAuthenticated={isAuthenticated} />
 
     </div>
   );

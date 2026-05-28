@@ -38,7 +38,7 @@ export function RegisterPage() {
   return (
     <PageShell
       title="Создать аккаунт"
-      description="Зарегистрируйся, чтобы сохранять понравившиеся карты, отмечать этапы и собирать свою коллекцию."
+      description="Зарегистрируйся, чтобы сохранять понравившиеся карты, отмечать этапы и добавлять карты в избранное."
     >
       <Card className="mx-auto w-full max-w-xl">
         <CardContent className="p-5 sm:p-6">

@@ -49,7 +49,7 @@ export function ProfileRoadmapCard({ roadmap }: ProfileRoadmapCardProps) {
             <span className="text-muted-foreground">Прогресс</span>
             <span className="font-medium">{roadmap.completion_percent}%</span>
           </div>
-          <ProgressBar value={roadmap.completion_percent} />
+          <ProgressBar value={roadmap.completion_percent} showPercent={false} />
         </div>
 
         {roadmap.last_progress_point ? (

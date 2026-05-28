@@ -65,14 +65,6 @@ export function AdminRoadmapsPage() {
         <StateMessage
           title="Карт пока нет"
           description="Нажми «Новая карта» и начни с названия."
-          action={
-            <Button asChild>
-              <Link to="/workshop/roadmaps/new">
-                <Plus className="mr-2 h-4 w-4" />
-                Создать карту
-              </Link>
-            </Button>
-          }
         />
       ) : null}
 

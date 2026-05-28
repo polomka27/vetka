@@ -31,6 +31,8 @@ export function RoadmapFlowNode({ data, selected }: NodeProps<RoadmapFlowNodeMod
 
   return (
     <div
+      data-status={data.status}
+      data-optional={data.is_optional ? "true" : undefined}
       className={cn(
         "roadmap-flow-node relative flex min-w-[200px] max-w-[200px] cursor-pointer items-center gap-2.5 rounded-2xl border px-3.5 py-3 backdrop-blur-xl transition-all duration-200",
 
@@ -80,11 +82,13 @@ export function RoadmapFlowNode({ data, selected }: NodeProps<RoadmapFlowNodeMod
       <Handle
         type="target"
         position={Position.Top}
-        isConnectable={false}
-        className="!h-px !w-px !border-0 !bg-transparent !opacity-0 !pointer-events-none"
+        isConnectable={!!data.can_connect}
+        className={data.can_connect
+          ? "!h-3.5 !w-3.5 !rounded-full !border-2 !border-violet-400/80 !bg-violet-900/70"
+          : "!h-px !w-px !border-0 !bg-transparent !opacity-0 !pointer-events-none"}
       />
 
-      <span className={cn("flex h-6 w-6 shrink-0 items-center justify-center rounded-full", badgeCls)}>
+      <span className={cn("roadmap-status-badge flex h-6 w-6 shrink-0 items-center justify-center rounded-full", badgeCls)}>
         <StatusIcon className="h-3.5 w-3.5 stroke-[2.2]" />
       </span>
 
@@ -95,8 +99,10 @@ export function RoadmapFlowNode({ data, selected }: NodeProps<RoadmapFlowNodeMod
       <Handle
         type="source"
         position={Position.Bottom}
-        isConnectable={false}
-        className="!h-px !w-px !border-0 !bg-transparent !opacity-0 !pointer-events-none"
+        isConnectable={!!data.can_connect}
+        className={data.can_connect
+          ? "!h-3.5 !w-3.5 !rounded-full !border-2 !border-violet-400/80 !bg-violet-900/70"
+          : "!h-px !w-px !border-0 !bg-transparent !opacity-0 !pointer-events-none"}
       />
     </div>
   );

@@ -81,3 +81,13 @@ export function useSavedRoadmaps() {
     toggleSavedRoadmap,
   };
 }
+
+// Блок очищает избранное из localStorage при выходе из аккаунта.
+export function clearSavedRoadmaps(): void {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.localStorage.removeItem(SAVED_ROADMAPS_STORAGE_KEY);
+  window.dispatchEvent(new Event(SAVED_ROADMAPS_UPDATED_EVENT));
+}

@@ -39,7 +39,7 @@ export function LoginPage() {
   return (
     <PageShell
       title="Вход"
-      description="Войди в аккаунт, чтобы сохранять прогресс, собирать коллекцию и работать со своими картами."
+      description="Войди в аккаунт, чтобы сохранять прогресс, добавлять карты в избранное и работать со своими картами."
     >
       <Card className="mx-auto w-full max-w-xl">
         <CardContent className="p-5 sm:p-6">

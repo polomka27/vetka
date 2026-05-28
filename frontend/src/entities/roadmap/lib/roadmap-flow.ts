@@ -164,12 +164,12 @@ export function buildRoadmapFlow(nodes: RoadmapNode[]): RoadmapFlowGraph {
         target: String(node.id),
         animated: isActiveEdge && status !== "done",
         style: {
-          strokeWidth: node.is_optional ? 1.5 : 2,
+          strokeWidth: node.is_optional ? 2 : 3,
           stroke: status === "done"
-            ? "rgba(52,211,153,0.5)"
+            ? "rgba(52,211,153,0.72)"
             : isActiveEdge
-              ? "rgba(139,92,246,0.85)"
-              : "rgba(139,92,246,0.22)",
+              ? "rgba(139,92,246,0.92)"
+              : "rgba(139,92,246,0.50)",
           strokeDasharray: node.is_optional ? "6 4" : "0",
         },
       };
@@ -202,4 +202,46 @@ export function buildRoadmapFlow(nodes: RoadmapNode[]): RoadmapFlowGraph {
     flatNodes,
     currentNodeId,
   };
+}
+
+// Блок рассчитывает dagre-позиции для всех узлов без учёта ручных смещений — для кнопки авто-выравнивания.
+export function computeAutoLayout(nodes: RoadmapNode[]): Map<number, { x: number; y: number }> {
+  const flatNodes = flattenRoadmapNodes(nodes);
+  const dagreGraph = new dagre.graphlib.Graph();
+  dagreGraph.setDefaultEdgeLabel(() => ({}));
+  dagreGraph.setGraph({
+    rankdir: "TB",
+    ranksep: 80,
+    nodesep: 42,
+    edgesep: 28,
+    marginx: 36,
+    marginy: 36,
+    ranker: "tight-tree",
+  });
+
+  for (const node of flatNodes) {
+    dagreGraph.setNode(String(node.id), {
+      width: ROADMAP_LAYOUT_NODE_WIDTH,
+      height: ROADMAP_LAYOUT_NODE_HEIGHT,
+    });
+  }
+
+  for (const node of flatNodes) {
+    if (node.parent_id !== null) {
+      dagreGraph.setEdge(String(node.parent_id), String(node.id));
+    }
+  }
+
+  dagre.layout(dagreGraph);
+
+  const positionMap = new Map<number, { x: number; y: number }>();
+  for (const node of flatNodes) {
+    const layoutNode = dagreGraph.node(String(node.id));
+    positionMap.set(node.id, {
+      x: Number((layoutNode.x - ROADMAP_LAYOUT_NODE_WIDTH / 2).toFixed(2)),
+      y: Number((layoutNode.y - ROADMAP_LAYOUT_NODE_HEIGHT / 2).toFixed(2)),
+    });
+  }
+
+  return positionMap;
 }

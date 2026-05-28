@@ -1,12 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import { Check, ChevronDown, Search } from "lucide-react";
+import { Search } from "lucide-react";
 
 import type { RoadmapFilters } from "@/entities/roadmap/model/types";
-import { useOutsidePointerDown } from "@/shared/lib/use-outside-pointerdown";
 import { Button } from "@/shared/ui/button";
+import { FilterSelect } from "@/shared/ui/filter-select";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
-import { cn } from "@/shared/lib/utils";
 
 // Блок описывает пропсы панели фильтров каталога.
 interface RoadmapsFiltersProps {
@@ -35,86 +33,6 @@ const levelOptions = [
   { value: "middle", label: "Middle" },
   { value: "senior", label: "Senior" }
 ];
-
-// Блок рендерит кастомный dropdown с более аккуратным выпадающим списком.
-function FilterSelect({
-  value,
-  onChange,
-  options,
-  id
-}: {
-  value: string;
-  onChange: (value: string) => void;
-  options: Array<{ value: string; label: string }>;
-  id: string;
-}) {
-  const [isOpen, setIsOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const selectedOption = options.find((option) => option.value === value) ?? options[0];
-
-  // Блок закрывает dropdown по клику или тапу на любую внешнюю часть страницы.
-  useOutsidePointerDown(containerRef, () => setIsOpen(false), isOpen);
-
-  // Блок закрывает dropdown по нажатию Escape.
-  useEffect(() => {
-    if (!isOpen) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setIsOpen(false); };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [isOpen]);
-
-  return (
-    <div className="relative w-full" ref={containerRef}>
-      <button
-        id={id}
-        type="button"
-        onClick={() => setIsOpen((currentValue) => !currentValue)}
-        className={cn(
-          "flex h-11 w-full items-center justify-between gap-3 rounded-full border border-input/80 bg-accent/80 px-4 pr-12 text-left text-sm shadow-[0_14px_32px_rgba(91,33,182,0.08),inset_0_1px_0_rgba(255,255,255,0.22)] outline-none backdrop-blur-xl transition-all focus:border-ring focus:ring-2 focus:ring-ring/20"
-        )}
-        aria-expanded={isOpen}
-        aria-haspopup="listbox"
-      >
-        <span className="truncate">{selectedOption.label}</span>
-        <ChevronDown
-          className={cn(
-            "pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-transform",
-            isOpen ? "rotate-180" : ""
-          )}
-        />
-      </button>
-
-      {isOpen ? (
-        <div
-          className="glass-surface absolute left-0 right-0 top-[calc(100%+0.5rem)] z-20 max-h-[min(18rem,calc(100svh-12rem))] overflow-y-auto rounded-[1.6rem] p-2"
-          role="listbox"
-        >
-          {options.map((option) => {
-            const isSelected = option.value === value;
-
-            return (
-              <button
-                key={option.value || "all"}
-                type="button"
-                className={cn(
-                  "flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-sm transition-colors",
-                  isSelected ? "bg-primary/12 text-foreground" : "hover:bg-white/10"
-                )}
-                onClick={() => {
-                  onChange(option.value);
-                  setIsOpen(false);
-                }}
-              >
-                <span>{option.label}</span>
-                {isSelected ? <Check className="h-4 w-4 text-primary" /> : null}
-              </button>
-            );
-          })}
-        </div>
-      ) : null}
-    </div>
-  );
-}
 
 // Блок рендерит панель поиска и фильтров для страницы каталога.
 export function RoadmapsFilters({

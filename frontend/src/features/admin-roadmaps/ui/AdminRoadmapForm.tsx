@@ -1,7 +1,7 @@
 import { Globe2 } from "lucide-react";
 import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 import {
   adminRoadmapFormSchema,
@@ -9,10 +9,29 @@ import {
 } from "@/entities/admin-roadmap/model/schemas";
 import type { AdminRoadmapDetails } from "@/entities/admin-roadmap/model/types";
 import { Button } from "@/shared/ui/button";
+import { FilterSelect } from "@/shared/ui/filter-select";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { StateMessage } from "@/shared/ui/state-message";
 import { Textarea } from "@/shared/ui/textarea";
+
+const categoryOptions = [
+  { value: "", label: "Выбери категорию" },
+  { value: "development", label: "Разработка и технологии" },
+  { value: "data", label: "Данные и аналитика" },
+  { value: "design", label: "Дизайн и продукт" },
+  { value: "business", label: "Бизнес и маркетинг" },
+  { value: "languages", label: "Языки и коммуникация" },
+  { value: "science", label: "Наука и исследование" },
+  { value: "management", label: "Управление и карьера" }
+];
+
+const levelOptions = [
+  { value: "", label: "Выбери уровень" },
+  { value: "junior", label: "Junior" },
+  { value: "middle", label: "Middle" },
+  { value: "senior", label: "Senior" }
+];
 
 // Блок описывает пропсы формы роадмапа для create/edit сценариев.
 interface AdminRoadmapFormProps {
@@ -86,7 +105,18 @@ export function AdminRoadmapForm({
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="grid gap-2">
           <Label htmlFor="roadmap-category">Категория</Label>
-          <Input id="roadmap-category" {...form.register("category")} />
+          <Controller
+            control={form.control}
+            name="category"
+            render={({ field }) => (
+              <FilterSelect
+                id="roadmap-category"
+                value={field.value ?? ""}
+                options={categoryOptions}
+                onChange={field.onChange}
+              />
+            )}
+          />
           {form.formState.errors.category ? (
             <p className="text-sm text-red-600">{form.formState.errors.category.message}</p>
           ) : null}
@@ -94,7 +124,18 @@ export function AdminRoadmapForm({
 
         <div className="grid gap-2">
           <Label htmlFor="roadmap-level">Уровень</Label>
-          <Input id="roadmap-level" {...form.register("level")} />
+          <Controller
+            control={form.control}
+            name="level"
+            render={({ field }) => (
+              <FilterSelect
+                id="roadmap-level"
+                value={field.value ?? ""}
+                options={levelOptions}
+                onChange={field.onChange}
+              />
+            )}
+          />
           {form.formState.errors.level ? (
             <p className="text-sm text-red-600">{form.formState.errors.level.message}</p>
           ) : null}

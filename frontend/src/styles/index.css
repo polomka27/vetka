@@ -304,6 +304,25 @@
   pointer-events: auto !important;
 }
 
+/* Блок улучшает читаемость нод карты в светлом режиме — переопределяет тёмные текстовые цвета. */
+[data-theme="light"] .roadmap-flow-node[data-status="not_started"] {
+  color: hsl(259 56% 26%);
+}
+
+[data-theme="light"] .roadmap-flow-node[data-status="not_started"][data-optional] {
+  color: hsl(259 40% 38% / 0.72);
+}
+
+[data-theme="light"] .roadmap-flow-node[data-status="done"] {
+  color: hsl(158 64% 24%);
+}
+
+/* Блок делает статус-бейдж «не начат» видимым в светлом режиме. */
+[data-theme="light"] .roadmap-flow-node[data-status="not_started"] .roadmap-status-badge {
+  background: rgba(109, 40, 217, 0.14);
+  color: rgba(109, 40, 217, 0.75);
+}
+
 [data-theme="light"] .react-flow__controls {
   border-color: rgba(139, 92, 246, 0.16) !important;
   background: rgba(255, 255, 255, 0.8) !important;

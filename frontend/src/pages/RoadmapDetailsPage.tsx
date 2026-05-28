@@ -170,24 +170,24 @@ export function RoadmapDetailsPage() {
             <>
               <div className="grid gap-5 lg:grid-cols-[minmax(0,1.3fr)_minmax(320px,0.7fr)]">
                 <div className="min-w-0 grid gap-4">
-                  <div className="relative w-full sm:w-fit" ref={collectionDropdownRef}>
+                  <div className="relative self-start w-full sm:w-fit" ref={collectionDropdownRef}>
                     <Button
                       aria-expanded={isCollectionOpen}
-                      aria-label="Открыть список карт из коллекции"
+                      aria-label="Открыть список карт из избранного"
                       className="h-10 w-full justify-between rounded-2xl border-white/12 bg-white/6 px-3 sm:w-auto"
                       onClick={() => setIsCollectionOpen((v) => !v)}
                       type="button"
                       variant="outline"
                     >
                       <Layers3 className="mr-2 h-4 w-4" />
-                      <span className="text-sm">Коллекция</span>
+                      <span className="text-sm">Избранное</span>
                       <ChevronDown
                         className={`ml-2 h-4 w-4 transition-transform ${isCollectionOpen ? "rotate-180" : ""}`}
                       />
                     </Button>
 
                     {isCollectionOpen ? (
-                      <div className="glass-surface absolute left-0 top-[calc(100%+0.75rem)] z-20 grid w-full gap-2 rounded-[1.6rem] p-2 shadow-[0_24px_60px_rgba(15,10,31,0.32)] sm:min-w-[320px] sm:w-auto">
+                      <div className="glass-surface absolute left-0 top-full z-20 grid w-full gap-2 rounded-[1.6rem] p-2 shadow-[0_24px_60px_rgba(15,10,31,0.32)] sm:min-w-[320px] sm:w-auto">
                         {collectionMaps.length > 0 ? (
                           collectionMaps.map((roadmap) => (
                             <Link
@@ -204,7 +204,7 @@ export function RoadmapDetailsPage() {
                           ))
                         ) : (
                           <div className="grid gap-1 rounded-2xl px-4 py-3">
-                            <div className="text-sm text-muted-foreground">В коллекции пока нет других карт.</div>
+                            <div className="text-sm text-muted-foreground">В избранном пока нет других карт.</div>
                             <Link
                               className="text-xs text-primary hover:underline"
                               to="/roadmaps"
@@ -284,7 +284,7 @@ export function RoadmapDetailsPage() {
                     : "grid gap-4"
                 }
               >
-                <div className="sticky top-20 h-[calc(100dvh-5rem)] sm:top-28 sm:h-[calc(100dvh-7rem)] lg:top-32 lg:h-[calc(100dvh-8rem)]">
+                <div className="sticky top-20 h-[calc(100dvh-9rem)] sm:top-28 sm:h-[calc(100dvh-11rem)] md:h-[calc(100dvh-7rem)] lg:top-32 lg:h-[calc(100dvh-8rem)]">
                   <RoadmapFlow
                     bare
                     graph={flowGraph}

@@ -2,8 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Locate, Maximize2, Minus, Plus } from "lucide-react";
 import {
   applyNodeChanges,
-  Background,
   ConnectionLineType,
+  type Connection,
   MarkerType,
   type NodeChange,
   type OnNodeDrag,
@@ -34,8 +34,10 @@ interface RoadmapFlowProps {
   title?: string;
   description?: string;
   allowDragging?: boolean;
+  allowConnecting?: boolean;
   bare?: boolean;
   onStepDragStop?: (payload: { nodeId: number; x: number; y: number }) => void;
+  onConnect?: (params: Connection) => void;
 }
 
 function ZoomControls() {
@@ -88,7 +90,7 @@ const ROADMAP_MIN_CANVAS_HEIGHT = 420;
 
 // Блок вычисляет нижний порог масштаба на основе фактических размеров карты.
 function getMinZoom(nodes: RoadmapFlowNodeModel[]): number {
-  if (nodes.length <= 1) return 0.6;
+  if (nodes.length <= 1) return 1.0;
 
   const bounds = nodes.reduce(
     (acc, node) => ({
@@ -105,8 +107,8 @@ function getMinZoom(nodes: RoadmapFlowNodeModel[]): number {
     bounds.maxY - bounds.minY
   );
 
-  // ~500px → 0.75, ~1000px → 0.57, >1500px → 0.5 (floor)
-  return Math.max(0.5, Math.min(0.75, 800 / (contentSize + 400)));
+  // ~500px → 1.0, ~1000px → 0.86, >1500px → 0.65 (floor)
+  return Math.max(0.65, Math.min(1.0, 1200 / (contentSize + 400)));
 }
 
 // Блок рассчитывает высоту холста по фактическим координатам шагов, чтобы большая карта не обрезалась контейнером.
@@ -148,8 +150,10 @@ export function RoadmapFlow({
   title = "Карта",
   description = "Нажми на шаг, чтобы открыть детали.",
   allowDragging = false,
+  allowConnecting = false,
   bare = false,
-  onStepDragStop
+  onStepDragStop,
+  onConnect
 }: RoadmapFlowProps) {
   const { flowNodes, flowEdges, currentNodeId } = useMemo(() => graph ?? buildRoadmapFlow(nodes), [graph, nodes]);
   const [displayNodes, setDisplayNodes] = useState(flowNodes);
@@ -166,11 +170,12 @@ export function RoadmapFlow({
           selected: isSelected,
           data: {
             ...node.data,
-            is_user_selected: isSelected
+            is_user_selected: isSelected,
+            can_connect: allowConnecting,
           }
         };
       }),
-    [displayNodes, selectedNodeIdAsString]
+    [displayNodes, selectedNodeIdAsString, allowConnecting]
   );
 
   // Блок синхронизирует локальное положение шагов с входным графом после загрузки или сохранения.
@@ -244,6 +249,7 @@ export function RoadmapFlow({
         onNodesChange={handleNodesChange}
         onNodeDragStop={handleNodeDragStop}
         onNodeClick={handleNodeClick}
+        onConnect={onConnect}
         onPaneClick={onClearSelection}
         panOnDrag
         panOnScroll={false}
@@ -253,7 +259,6 @@ export function RoadmapFlow({
         maxZoom={1.35}
         proOptions={{ hideAttribution: true }}
       >
-        {!bare && <Background color="var(--roadmap-grid-color)" gap={26} size={1} />}
         <ZoomControls />
         <GoToCurrentControl nodeId={currentNodeId !== null ? String(currentNodeId) : null} />
       </ReactFlow>

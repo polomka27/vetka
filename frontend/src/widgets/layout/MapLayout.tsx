@@ -10,7 +10,7 @@ export function MapLayout() {
       <div className="pointer-events-none absolute inset-0 -z-10 bg-vetka-grid bg-[size:32px_32px] opacity-20" />
       <div className="pointer-events-none absolute left-1/2 top-[-10rem] -z-10 h-[22rem] w-[40rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(167,139,250,0.26),transparent_62%)] blur-3xl sm:top-[-12rem] sm:h-[26rem] sm:w-[52rem] lg:top-[-14rem] lg:h-[28rem] lg:w-[62rem]" />
       <AppHeader />
-      <main className="flex flex-1 flex-col overflow-y-auto pt-20 sm:pt-28 lg:pt-32">
+      <main className="flex flex-1 flex-col overflow-y-auto pt-20 pb-[calc(env(safe-area-inset-bottom)+3.5rem)] sm:pt-28 md:pb-0 lg:pt-32">
         <Outlet />
       </main>
     </div>
