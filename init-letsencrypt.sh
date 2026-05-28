@@ -4,15 +4,15 @@
 
 set -e
 
-# Домен в Punycode (ветка.online -> xn--e1afmkfd.online)
+# Домен в Punycode (ветка.online -> xn--80adju3b.online)
 # Проверить можно: python3 -c "print('ветка.online'.encode('idna').decode())"
-DOMAINS="xn--e1afmkfd.online www.xn--e1afmkfd.online"
+DOMAINS="xn--80adju3b.online www.xn--80adju3b.online"
 EMAIL="prodbysilentstill@gmail.com"
 STAGING=0  # Поставь 1 для тестирования (не расходует лимит Let's Encrypt)
 
 DATA_PATH="./certbot"
 
-if [ -d "$DATA_PATH/conf/live/xn--e1afmkfd.online" ]; then
+if [ -d "$DATA_PATH/conf/live/xn--80adju3b.online" ]; then
   read -p "Сертификат уже существует. Пересоздать? (y/N) " decision
   if [ "$decision" != "Y" ] && [ "$decision" != "y" ]; then
     exit
@@ -31,7 +31,7 @@ fi
 
 # Создаём временный самоподписанный сертификат, чтобы nginx стартовал
 echo "--- Создание временного самоподписанного сертификата..."
-docker compose run --rm --entrypoint "sh -c 'mkdir -p /etc/letsencrypt/live/xn--e1afmkfd.online && openssl req -x509 -nodes -newkey rsa:4096 -days 1 -keyout /etc/letsencrypt/live/xn--e1afmkfd.online/privkey.pem -out /etc/letsencrypt/live/xn--e1afmkfd.online/fullchain.pem -subj /CN=localhost'" certbot
+docker compose run --rm --entrypoint "sh -c 'mkdir -p /etc/letsencrypt/live/xn--80adju3b.online && openssl req -x509 -nodes -newkey rsa:4096 -days 1 -keyout /etc/letsencrypt/live/xn--80adju3b.online/privkey.pem -out /etc/letsencrypt/live/xn--80adju3b.online/fullchain.pem -subj /CN=localhost'" certbot
 
 # Запускаем nginx с временным сертификатом
 echo "--- Запуск nginx..."
@@ -39,9 +39,9 @@ docker compose up --force-recreate -d frontend
 
 # Удаляем временный сертификат
 echo "--- Удаление временного сертификата..."
-docker compose run --rm --entrypoint "rm -Rf /etc/letsencrypt/live/xn--e1afmkfd.online \
-  && rm -Rf /etc/letsencrypt/archive/xn--e1afmkfd.online \
-  && rm -Rf /etc/letsencrypt/renewal/xn--e1afmkfd.online.conf" certbot
+docker compose run --rm --entrypoint "rm -Rf /etc/letsencrypt/live/xn--80adju3b.online \
+  && rm -Rf /etc/letsencrypt/archive/xn--80adju3b.online \
+  && rm -Rf /etc/letsencrypt/renewal/xn--80adju3b.online.conf" certbot
 
 # Запрашиваем настоящий сертификат
 echo "--- Получение сертификата Let's Encrypt..."
@@ -55,8 +55,8 @@ docker compose run --rm --entrypoint "certbot certonly --webroot -w /var/www/cer
   --email $EMAIL \
   --agree-tos \
   --no-eff-email \
-  -d xn--e1afmkfd.online \
-  -d www.xn--e1afmkfd.online" certbot
+  -d xn--80adju3b.online \
+  -d www.xn--80adju3b.online" certbot
 
 # Перезагружаем nginx с реальным сертификатом
 echo "--- Перезагрузка nginx..."
