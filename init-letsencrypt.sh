@@ -19,16 +19,6 @@ if [ -d "$DATA_PATH/conf/live/xn--80adju3b.online" ]; then
   fi
 fi
 
-# Скачиваем рекомендованные параметры TLS от certbot
-if [ ! -e "$DATA_PATH/conf/options-ssl-nginx.conf" ] || [ ! -e "$DATA_PATH/conf/ssl-dhparams.pem" ]; then
-  echo "--- Загрузка рекомендованных TLS-параметров..."
-  mkdir -p "$DATA_PATH/conf"
-  curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf \
-    > "$DATA_PATH/conf/options-ssl-nginx.conf"
-  curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot/certbot/ssl-dhparams.pem \
-    > "$DATA_PATH/conf/ssl-dhparams.pem"
-fi
-
 # Создаём временный самоподписанный сертификат, чтобы nginx стартовал
 echo "--- Создание временного самоподписанного сертификата..."
 docker compose run --rm --entrypoint "sh -c 'mkdir -p /etc/letsencrypt/live/xn--80adju3b.online && openssl req -x509 -nodes -newkey rsa:4096 -days 1 -keyout /etc/letsencrypt/live/xn--80adju3b.online/privkey.pem -out /etc/letsencrypt/live/xn--80adju3b.online/fullchain.pem -subj /CN=localhost'" certbot
