@@ -368,7 +368,7 @@ export function HomePage() {
       </Reveal>
 
       {/* ─────────────────────────────────────────────────── 7. ФУТЕР ── */}
-      <HomeFooter isAuthenticated={isAuthenticated} />
+      <AppFooter />
 
     </div>
   );
